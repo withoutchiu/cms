@@ -1,0 +1,183 @@
+﻿/* GLOBAL STYLES
+-------------------------------------------------- */
+/*=====================================================================================
+================================* Fonts and body text *================================
+==================================================================================== */
+
+
+@font-face {
+    font-family: 'Lubalin Graph';
+    	 src: url('/fonts/lubalingraphstd-book-webfont.eot');
+    	 src: url('/fonts/lubalingraphstd-book-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/lubalingraphstd-book-webfont.woff') format('woff'),
+         url('/fonts/lubalingraphstd-book-webfont.ttf') format('truetype'),
+         url('/fonts/lubalingraphstd-book-webfont.svg#itc_lubalin_graph_stdbook') format('svg');
+    font-weight: normal;
+
+}
+
+@font-face {
+    font-family: 'Lubalin Graph';
+    	 src: url('/fonts/lubalingraphstd-demi-webfont.eot');
+    	 src: url('/fonts/lubalingraphstd-demi-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/lubalingraphstd-demi-webfont.woff') format('woff'),
+         url('/fonts/lubalingraphstd-demi-webfont.ttf') format('truetype'),
+         url('/fonts/lubalingraphstd-demi-webfont.svg#itc_lubalin_graph_stddemi') format('svg');
+    font-weight: bold;
+
+}
+
+@font-face {
+    font-family: 'Lubalin Graph Demi';
+    	 src: url('/fonts/lubalingraphstd-demi-webfont.eot');
+    	 src: url('/fonts/lubalingraphstd-demi-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/lubalingraphstd-demi-webfont.woff') format('woff'),
+         url('/fonts/lubalingraphstd-demi-webfont.ttf') format('truetype'),
+         url('/fonts/lubalingraphstd-demi-webfont.svg#itc_lubalin_graph_stddemi') format('svg');
+    font-weight: bold;
+
+}
+
+@font-face {
+    font-family: 'Helvetica Neue';
+    	 src: url('/fonts/HelveticaNeue.eot');
+    	 src: url('/fonts/HelveticaNeue.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/HelveticaNeue.woff') format('woff'),
+         url('/fonts/HelveticaNeue.ttf') format('truetype'),
+         url('/fonts/HelveticaNeue.svg#helvetica_neue') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Helvetica Neue';
+    	 src: url('/fonts/HelveticaNeue-Bold.eot');
+    	 src: url('/fonts/HelveticaNeue-Bold.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/HelveticaNeue-Bold.woff') format('woff'),
+         url('/fonts/HelveticaNeue-Bold.ttf') format('truetype'),
+         url('/fonts/HelveticaNeue-Bold.svg#helvetica_neue_bold') format('svg');
+    font-weight: bold;  
+}
+
+@font-face {
+    font-family: 'Helvetica Neue Medium';
+    	 src: url('/fonts/HelveticaNeue-Medium.eot');
+    	 src: url('/fonts/HelveticaNeue-Medium.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/HelveticaNeue-Medium.woff') format('woff'),
+         url('/fonts/HelveticaNeue-Medium.ttf') format('truetype'),
+         url('/fonts/HelveticaNeue-Medium.svg#helvetica_neue_medium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    
+}
+
+
+
+
+
+body {
+  padding-bottom: 0px;
+  font-family : 'Helvetica Neue', Tahoma, Geneva, Sans-serif;
+}
+
+h1, h2, h3, h4, h5,{ 
+  color: #393939;
+  font-family : 'Helvetica Neue', Tahoma, Geneva, Sans-serif;
+}
+
+p { 
+  font-family : 'Helvetica Neue', Tahoma, Geneva, Sans-serif;
+  font-size : 16px;
+  line-height : 1.5em;
+  color: #393939;
+}
+
+/*=====================================================================================
+================================* NAVBAR *=============================================
+==================================================================================== */
+
+#nav.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index:1030;
+}
+
+.top-bluebar {
+background-color: #3CB2C9;
+height: 40px;
+color: #fff;
+text-align: right;
+display:block;
+position:relative;
+width:100%;
+z-index: 1050;
+}
+
+.top-bluebar p, .top-bluebar a {
+color: #fff;
+font-size: 14px;
+padding-top: 10px;
+text-decoration: underline;
+padding-right: 20px; 
+}
+
+.test form{
+	 
+	background-color:#FFFFFF;  
+	opacity: 0.9;
+	border-radius: 2%; 
+	margin-right:33%;
+	margin-top:15%;
+	-webkit-box-shadow: 0px 0px 25px 5px rgba(230,230,230,1);
+	-moz-box-shadow: 0px 0px 25px 5px rgba(230,230,230,1);
+	box-shadow: 0px 0px 25px 5px rgba(230,230,230,1);
+}
+.test p{
+	text-align:center; 
+	color:#666666; 
+	font-weight:bold;
+}
+
+#reg{
+	margin:  30px auto auto 70px;
+	width:30em;
+	position:fixed;
+	background-color:white;
+	opacity:0.9;
+	height:33em;
+	border-radius:45px;
+	border:thingainsboro solid;
+
+}
+.regform,  h1, p{
+	font-weight:bold;
+	text-align:center;
+}
+.reginput{
+	border-radius:5px;
+	padding-left:10px;
+	width: 25em;
+	border:thin gainsboro solid;
+
+}
+.regput, regdate{
+	border-radius:5px;
+	padding-left:10px;
+	width: 12.5em;
+	border:thin gainsboro solid;
+}
+.regsubmit{
+	border-radius:2px;
+	width:5em;
+	border:thin gainsboro solid;
+
+}
+.formlogin{
+	border-radius:5px;
+	padding-left:10px;
+	width: 10.5em;
+	border:thin gainsboro solid;
+	height:1.5em;
+}
