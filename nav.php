@@ -1,5 +1,32 @@
-<link rel="stylesheet" type="text/css"href="indexcss/css/page.css">
-<link rel="stylesheet" href="indexcss/css/topnavdesignright.css">
+<?php
+
+if(session_id() == '' || !isset($_SESSION)) {
+    // session isn't started
+    session_start();
+}
+$accountType = "";
+$username = "";
+$lastName = "";
+$firstName = "";
+
+if(isset($_SESSION['accountType']) && !empty($_SESSION['accountType'])) {
+  $accountType = $_SESSION['accountType'];
+}
+if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+  $username = $_SESSION['username'];
+}
+
+if(isset($_SESSION['lastName']) && !empty($_SESSION['lastName'])) {
+  $lastName = $_SESSION['lastName'];
+}
+
+if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
+  $firstName = $_SESSION['firstName'];
+}
+
+
+ ?>
+<link rel="stylesheet" type="text/css" href="indexcss/css/page.css">
 <link rel="stylesheet" href="indexcss/css/topnavdesign.css">
 <link href="Assets/css/lightbox.css" rel="stylesheet">
 
@@ -14,7 +41,7 @@
 
 
 <!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="opacity:0.9; margin-bottom: 20px;">
+<nav class="navbar navbar-inverse navbar-fixed-top" style="opacity:0.9; margin-bottom: 20px;">
 <div class="container">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -22,7 +49,7 @@
           <span class="sr-only"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <a href="../index.jsp"></a>
+          <!--<a href="../index.jsp"></a>-->
       </button>
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -32,7 +59,7 @@
               <a href="index.php">Home</a>
           </li>
           <li>
-              <a href= product1.html>Products</a>
+              <a href= product.php>Products</a>
           </li>
           <li>
               <a href= about.html>About</a>
@@ -40,15 +67,21 @@
           <li>
               <a href= contact.html>Contact Us</a>
           </li>
+          <li>
+              <a><p style="color:white">Welcome back, <?= $firstName ?> <?= $lastName ?>.</p></a>
+          </li>
           </ul>
        <ul class="nav navbar-nav navbar-right">
        <li>
-       <a href="login.php">Login</a>
+          <?php if(isset($_SESSION['accountType'])): ?>
+           <a href="login.php">logout</a>
+          <?php else: ?>
+           <a href="login.php">Login</a>
+         <?php endif ?>
        </li>
        </ul>
   </div>
   <!-- /.navbar-collapse -->
 </div>
-
 <!-- /.container -->
 </nav>

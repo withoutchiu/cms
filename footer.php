@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer>
+<footer class="page-footer font-small blue pt-4">
   <nav class="navbar navbar-inverse navbar-bottom" style="padding:0 0 20px 0">
     <div class="container">
       <div class="row" style="opacity:.9">

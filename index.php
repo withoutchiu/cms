@@ -1,16 +1,15 @@
 <?php
 
-
  ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>Web Content Management System</title>
-    <?php include('nav.php') ?>
   </head>
   <body  style="background-image:url('Assets/img/bg.jpg'); background-attachment:fixed">
-
+  <?php include('nav.php') ?>
+  <br/><br/>
   <header id="myCarousel" class="carousel slide">
        <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -96,11 +95,6 @@
       </div>
      </form>
     </div>
-    <script>
-    $('.carousel').carousel({
-        interval: 5000 //changes the speed
-    })
-    </script>
     <?php include('footer.php') ?>
   </body>
 </html>
