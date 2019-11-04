@@ -67,14 +67,21 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
           <li>
               <a href= contact.html>Contact Us</a>
           </li>
-          <li>
-              <a><p style="color:white">Welcome back, <?= $firstName ?> <?= $lastName ?>.</p></a>
-          </li>
+          <?php if(!(isset($_SESSION['accountType']))): ?>
+            <li>
+                <a href= register.php>Register User</a>
+            </li>
+          <?php endif ?>
+          <?php if(isset($_SESSION['accountType'])): ?>
+            <li>
+                <a><p style="color:white">Welcome back, <?= $firstName ?> <?= $lastName ?>.</p></a>
+            </li>
+          <?php endif ?>
           </ul>
        <ul class="nav navbar-nav navbar-right">
        <li>
           <?php if(isset($_SESSION['accountType'])): ?>
-           <a href="login.php">logout</a>
+           <a href="logout.php">logout</a>
           <?php else: ?>
            <a href="login.php">Login</a>
          <?php endif ?>

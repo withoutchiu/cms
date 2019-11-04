@@ -1,6 +1,10 @@
 <?php
 require('connect.php');
-
+session_Start();
+//ORDER BY Date DESC LIMIT 5
+$query = "SELECT * FROM categories";
+$statement = $db->prepare($query);
+$statement->execute();
 
  ?>
 ﻿<!DOCTYPE html>
@@ -26,7 +30,9 @@ require('connect.php');
         <div class="row">
             <div class="col-lg-12">
                   <h1 class="page-header">Products.</h1>
-                  <h4>If admin => Click here to add product</h4>
+                  <?php if(isset($_SESSION['accountType'])): ?>
+                    <h4><a href="categories.php?action=insert">Click here to add product</a></h4>
+                  <?php endif ?>
             </div>
           </div>
         <!-- /.row -->
@@ -34,17 +40,24 @@ require('connect.php');
         <!-- Projects Row -->
 
         <div class="row">
+          <?php if($statement->rowCount() == 0): ?>
+            <h2>No categories yet.</h2>
+          <?php  else: ?>
+            <?php while($row = $statement->fetch()): ?>
             <div class="col-md-4 img-portfolio">
                 <a href="Assets/img/Category/ceiling.jpg" data-lightbox="product-1">
                     <img class="img-responsive img-hover" src="Assets/img/Category/ceiling.jpg" data-lightbox="product-1">
                 </a>
                 <h3>
-                    <a href= productCeiling.html>Ceiling</a>
-                    <a id="updateCategoriesBtn">if admin => Update</a>
+                    <a href=""><?=$row['categoryTitle'] ?></a>
+                    <a href="">if admin => Update</a>
                 </h3>
-                <p class="auto-style7">With BioWood's range of durable ceiling products, you may now stylise your home or building to compliment and enhance the interior and exterior appearance.</p>
+                <p class="auto-style7"><?=$row['categoryDescription'] ?></p>
             </div>
+            <?php endwhile ?>
+          <?php endif ?>
 
+            <!--
             <div class="col-md-4 img-portfolio">
                 <a href="img/Category/deck.jpg" data-lightbox="product-1">
                     <img class="img-responsive img-hover" src="Assets/img/Category/deck.jpg" >
@@ -63,13 +76,13 @@ require('connect.php');
                     <a href="productDoorProfile.html">Door Profile</a>
                 </h3>
                 <p class="auto-style7">Smooth, aesthetically pleasing design and finish. BioWood door profiles and frames have an integrated architrave with fine curved edges and a finish that enhances their overall appeal.</p>
-            </div>
+            </div>-->
 
         </div>
         <!-- /.row -->
 
         <!-- Projects Row -->
-        <div class="row">
+        <!--<div class="row">
 
                    <div class="col-md-4 img-portfolio">
                 <a href="img/Category/facade.jpg" data-lightbox="product-1">
@@ -100,7 +113,7 @@ require('connect.php');
                 </h3>
                 <p class="auto-style7">Simply rugged, lightweight, and durable. BioWood Half Log profiles provide a tasteful country facade look.</p>
             </div>
-        </div>
+        </div>-->
 
         <!-- Projects Row -->
 

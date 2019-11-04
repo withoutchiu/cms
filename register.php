@@ -1,7 +1,6 @@
 <?php
 require('connect.php');
-
-$errorMessage = "";
+$errorMessage = "1";
 if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_POST['emailAddress'])){
   $firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRING);
 	$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING);
@@ -9,18 +8,21 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
   $type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
   $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
   $passwordConfirm = filter_input(INPUT_POST, 'password_confirmation', FILTER_SANITIZE_STRING);
-
   // Validate password strength
   $uppercase = preg_match('@[A-Z]@', $password);
   $lowercase = preg_match('@[a-z]@', $password);
   $number    = preg_match('@[0-9]@', $password);
   $specialChars = preg_match('@[^\w]@', $password);
 
-
-
+  echo $firstName;
+  echo $lastName;
+  echo $emailAddress;
+  echo $type;
+  echo $password;
   if((strlen($firstName) > 0) && (strlen($lastName) > 0) && (strlen($emailAddress) > 0)){
     if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
         $errorMessage = 'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.';
+        echo $errorMessage;
     }else{
       if($password == $passwordConfirm){
           $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -39,12 +41,11 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
     }
   }
 }
- ?>
-
+?>
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-    <title>Register Page for admin</title>
+    <title>Register Page</title>
     <!-- Bootstrap Core CSS -->
     <link href='Assets/css/bootstrap.min.css' rel='stylesheet'>
     <!-- Custom CSS -->
@@ -98,19 +99,20 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
     </style>
 </head>
 <body>
-
-
+    <?php include('nav.php') ?>
+    <br/>
+    <br/>
 		<div class='col-xs-10 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4'>
         	<div class='panel panel-default'>
         		<div class='panel-heading'>
-			    		<h1 class='panel-title' style='font-size:x-large; text-align:center'>Admin Register</h1>
+			    		<h1 class='panel-title' style='font-size:x-large; text-align:center'>Account Registeration</h1>
 			 			</div>
 			 			<div class='panel-body'>
 			    		<form method="post">
 			    			<div class='row'>
 			    				<div class='col-xs-6 col-sm-6 col-md-6'>
 			    					<div class='form-group'>
-			               				<input type='text' name='firstName' id='firstName' placeholder='Input First Name'  autocomplete='off' class='form-control input-lg' pattern='[A-Za-z]{1,}' title='Letters only' required>
+			               				<input type='text' name='firstName' id='firstName' placeholder='Input First Name'  autocomplete='off' class='form-control input-lg' required>
 			    					</div>
 			    				</div>
 			    				<div class='col-xs-6 col-sm-6 col-md-6'>
@@ -119,16 +121,7 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
 			    					</div>
 			    				</div>
 			    			</div>
-
-							<div class='row'>
-			    				<div class='col-xs-6 col-sm-6 col-md-6'>
-									<div class='form-group'>
-									<label>Input Account Type</label>
-			    						<input type='text' name='type' id='type' class='form-control input-lg' readonly value='Admin'>
-			    					</div>
-			    				</div>
-			    			</div>
-
+			    			<input type='text' name='type' id='type' class='form-control input-lg' readonly value='Non-Admin' style="display:none">
 			    			<div class='form-group'>
 			    				<input type='email' name='emailAddress' id='emailAddress' class='form-control input-lg' pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder='Email Address' required>
 			    				<u><i style='font-size:16px;'> *This will serve as your username for logging in.</i></u>
@@ -149,9 +142,7 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
 			    			</div>
                 <div class='p-3 mb-2 bg-danger text-white' id='confirmError'>Password does not match. Please try Again.</div>
                 <div class='p-3 mb-2 bg-success text-white' id='confirmSuccess'>Password Match!</div>
-                <?php if($errorMessage >= 1): ?>
-                  <div class='p-3 mb-2 bg-success text-white' id='confirmSuccess'><?= $errorMessage ?></div>
-                <?php endif ?>
+                <div class='p-3 mb-2 bg-danger text-white' id='confirmSuccess'><?= $errorMessage ?></div>
                 <br/>
 						<div class='col-lg-offset-5'>
 			    			<input type='submit' name='register' id='register' value='Register' class='btn btn-info btn-block input-lg' style='width:100px; font-size: large;'>
@@ -168,6 +159,3 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
 			    	</div>
 	    		</div>
     		</div>
-</body>
-
-</html>
