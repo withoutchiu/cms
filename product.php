@@ -2,11 +2,43 @@
 require('connect.php');
 session_Start();
 //ORDER BY Date DESC LIMIT 5
-$query = "SELECT * FROM categories";
-$statement = $db->prepare($query);
-$statement->execute();
+$titlePage = "Products";
+$accountType = "";
+$userId = "";
+if(!isset($_GET['sortBy'])){
+  $query = "SELECT * FROM categories";
+  $statement = $db->prepare($query);
+  $statement->execute();
+}
+if(isset($_GET['sortBy']) AND $_GET['sortBy'] == "Title"){
+  $query = "SELECT * FROM categories ORDER BY CategoryTitle";
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $titlePage = "Products by Title";
+}
+if(isset($_GET['sortBy']) AND $_GET['sortBy'] == "Update"){
+  $query = "SELECT * FROM categories ORDER BY updatedDate DESC";
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $titlePage = "Products by Latest Update";
+}
+if(isset($_GET['sortBy']) AND $_GET['sortBy'] == "Create"){
+  $query = "SELECT * FROM categories ORDER BY createdDate";
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $titlePage = "Products by Created Date";
+}
 
- ?>
+if(isset($_SESSION['userId'])){
+  $accountType = $_SESSION['accountType'];
+  $userId = $_SESSION['userId'];
+}
+// if(isset($_GET['sortBy']) == "discussed"){
+//   $query = "SELECT * FROM categorie ORDER BY CategoryTitle";
+//   $statement = $db->prepare($query);
+//   $statement->execute();
+// }
+?>
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -29,8 +61,9 @@ $statement->execute();
         <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
-                  <h1 class="page-header">Products.</h1>
-                  <?php if(isset($_SESSION['accountType'])): ?>
+                  <?php if($_GET) ?>
+                  <h1 class="page-header"><?=$titlePage ?></h1>
+                  <?php if(isset($_SESSION['userId'])): ?>
                     <h4><a href="categories.php?action=insert">Click here to add product</a></h4>
                   <?php endif ?>
             </div>
@@ -43,16 +76,36 @@ $statement->execute();
           <?php if($statement->rowCount() == 0): ?>
             <h2>No categories yet.</h2>
           <?php  else: ?>
+            <?php if(isset($_SESSION['userId'])): ?>
+                <div class="col-md-offset-4 col-md-4 img-portfolio">
+                  <form method="GET">
+                      <div class="col-md-8">
+                        <select class="form-control" id="sortBy" name="sortBy">
+                          <option>Sort By...</option>
+                          <option value="Title">Sort by Title</option>
+                          <option value="Update">Sort by latest Update</option>
+                          <option value="Create">Sort by Created Update</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <input type="submit" value="Search" class="btn btn-primary">
+                      </div>
+                  </form>
+                </div>
+              </div>
+            <?php endif ?>
             <?php while($row = $statement->fetch()): ?>
             <div class="col-md-4 img-portfolio">
-                <a href="Assets/img/Category/ceiling.jpg" data-lightbox="product-1">
-                    <img class="img-responsive img-hover" src="Assets/img/Category/ceiling.jpg" data-lightbox="product-1">
+                <a href="<?=$row['categoryImage']?>" data-lightbox="product-1">
+                    <img class="img-responsive img-hover img-thumbnail img-smaller" src="<?=substr($row['categoryImage'],0, -4) . "_medium" . substr($row['categoryImage'], -4)?>" data-lightbox="product-1" >
                 </a>
                 <h3>
                     <a href=""><?=$row['categoryTitle'] ?></a>
-                    <a href="">if admin => Update</a>
+                  <?php if($accountType == 'Admin' OR $userId == $row['updatedBy']): ?>
+                    <a href="categories.php?action=update&id=<?=$row['categoryId']?>" class="btn btn-primary" id="">Update</a>
+                  <?php endif ?>
                 </h3>
-                <p class="auto-style7"><?=$row['categoryDescription'] ?></p>
+                <p class="auto-style7"><?=$row['categoryDescription']?></p>
             </div>
             <?php endwhile ?>
           <?php endif ?>

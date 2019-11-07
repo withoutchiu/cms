@@ -37,6 +37,7 @@ if($_POST && isset($_POST['emailAddress']) && isset($_POST["password"])){
     while($row = $statement->fetch()){
       if($row['username'] == $emailAddress){
         if (password_verify($password, $row['password'])) {
+            $_SESSION['userId'] = $row['userId'];
             $_SESSION['username'] = $row['username'];
             $_SESSION['lastName'] = $row['lastName'];
             $_SESSION['firstName'] = $row['firstName'];

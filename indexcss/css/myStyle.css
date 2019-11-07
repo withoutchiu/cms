@@ -1,3 +1,7 @@
 #updateCategoriesBtn{
   font-size:12px;
 }
+
+.img-smaller{
+  height: 250px !important;
+}
