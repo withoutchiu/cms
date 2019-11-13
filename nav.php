@@ -59,17 +59,17 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
               <a href="index.php">Home</a>
           </li>
           <li>
-              <a href= product.php>Products</a>
+              <a href="product.php">Products</a>
           </li>
           <li>
-              <a href= about.html>About</a>
+              <a href="">About</a>
           </li>
           <li>
-              <a href= contact.html>Contact Us</a>
+              <a href="">Contact Us</a>
           </li>
           <?php if(!(isset($_SESSION['userId']))): ?>
             <li>
-                <a href= register.php>Register User</a>
+                <a href="register.php">Register User</a>
             </li>
           <?php endif ?>
           <?php if(isset($_SESSION['userId'])): ?>
@@ -79,9 +79,14 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
           <?php endif ?>
           </ul>
        <ul class="nav navbar-nav navbar-right">
-       <li>
+       <!-- <li>
            <a href= register.php>Add Page</a>
-       </li>
+       </li> -->
+       <?php if(isset($_SESSION['accountType']) AND $_SESSION['accountType'] == 'Admin'): ?>
+         <li>
+           <a href="">Manage Users Account</a>
+         </li>
+       <?php endif ?>
        <li>
           <?php if(isset($_SESSION['userId'])): ?>
            <a href="logout.php">logout</a>

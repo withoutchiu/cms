@@ -1,5 +1,5 @@
 <?php
     session_start();
     session_destroy();
-    header("Location:product.php");
+    header("Location:index.php");
 ?>

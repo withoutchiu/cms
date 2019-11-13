@@ -11,7 +11,7 @@ function call()
 
 if(isset($_GET['action']) AND $_GET['action'] == "insert"){
   $action = "insert";
-}elseif(isset($_GET['action']) AND $_GET['action'] == "update" AND isset($_GET['id']) AND ($_GET['id']) > 1 AND is_numeric($_GET['id'])){
+}elseif(isset($_GET['action']) AND $_GET['action'] == "update" AND isset($_GET['id']) AND ($_GET['id']) >= 1 AND is_numeric($_GET['id'])){
   $action = "update";
 
   $qry = "SELECT * FROM categories WHERE categoryId = '$_GET[id]'";
@@ -56,7 +56,7 @@ if($_POST && isset($_POST['insert']) && isset($_POST['categoryTitle']) && isset(
   $imagePathToDb = "";
 
   $categoryTitle = filter_input(INPUT_POST, 'categoryTitle', FILTER_SANITIZE_STRING);
-	$categoryDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_STRING);
+	$categoryDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$updatedBy = filter_input(INPUT_POST, 'updatedBy', FILTER_SANITIZE_STRING);
 
   $query = "INSERT INTO categories(categoryTitle,categoryDescription,categoryImage,updatedBy)
@@ -103,16 +103,19 @@ if($_POST && isset($_POST['insert']) && isset($_POST['categoryTitle']) && isset(
       }else{
         echo "<h2>File is not allowed. Please try using 'gif', 'jpg', 'jpeg', 'png', 'pdf', 'gif' type only!</h2>";
       }
+  }else{
+    header("Location:product.php");
   }
   $statement->bindValue(':categoryImage', $imagePathToDb);
   $statement->execute();
 
   header("Location:product.php");
 }
-
 if($_POST && isset($_POST['update']) && isset($_POST['categoryTitle']) && isset($_POST['categoryDescription']) && isset($_POST['categoryId'])){
+  echo "<h1> Test2--- " . $_POST['categoryDescription'] . "</h1>";
+
   $categoryTitle = filter_input(INPUT_POST, 'categoryTitle', FILTER_SANITIZE_STRING);
-  $categoryDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_STRING);
+  $categoryDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
 
   $image_upload_detected = isset($_FILES['categoryImage1']) && ($_FILES['categoryImage1']['error'] === 0);
@@ -135,11 +138,9 @@ if($_POST && isset($_POST['update']) && isset($_POST['categoryTitle']) && isset(
   $statement->bindValue(':categoryTitle', $categoryTitle);
   $statement->bindValue(':categoryDescription', $categoryDescription);
   $statement->bindValue(':categoryId', $categoryId , PDO::PARAM_INT);
-
   $statement->execute();
-
   header("Location:product.php");
-}else{
+  }else{
     echo "<h1>image upload</h1>";
     $isDeletedMedium = unlink(substr($_POST['categoryImagePrev'],0 , -4) . "_medium" . substr($_POST['categoryImagePrev'], -4));
     $isDeletedThumbnail = unlink(substr($_POST['categoryImagePrev'],0 , -4) . "_thumbnail" . substr($_POST['categoryImagePrev'], -4));
@@ -182,6 +183,8 @@ if($_POST && isset($_POST['update']) && isset($_POST['categoryTitle']) && isset(
           }else{
             echo "<h2>File is not allowed. Please try using 'gif', 'jpg', 'jpeg', 'png', 'pdf', 'gif' type only!</h2>";
           }
+      }else{
+        header("Location:product.php");
       }
       $query = "UPDATE categories SET categoryTitle ='$_POST[categoryTitle]', categoryDescription = '$_POST[categoryDescription]', categoryImage = '$imagePathToDb'
       WHERE categoryId = '$_GET[id]' ";
@@ -213,14 +216,17 @@ if($_POST && isset($_POST['delete'])){
    <head>
      <meta charset="utf-8">
      <title>Product Categories</title>
+     <script src="https://cdn.tiny.cloud/1/1btjkrz09mo7dj8wr7gi062if5ego7bhp8vgu2mohwlhy5vp/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+     <script>tinymce.init({selector:'#categoryDescription'});</script>
    </head>
    <body>
      <?php include('nav.php') ?>
      <?php if($action == "insert"): ?>
        <h1>insert</h1>
-       <form method="POST" enctype="multipart/form-data">
+       <form method="POST" enctype="multipart/form-data" id="createFrm">
          <p>Category Title: <input type="text" name="categoryTitle" id="categoryTitle" required/></p>
-         <p>Category Description: <input type="text" name="categoryDescription" id="categoryDescription" required/></p>
+         <p>Category Description: <textarea rows="4" cols="50" value="" name="categoryDescription" id="categoryDescription" form="createFrm"></textarea></p>
+         <!-- <p>Category Description: <input type="text" name="categoryDescription" id="categoryDescription" required/></p> -->
          <p><label for='image'>Image Filename:</label></p>
          <p><input type='file' name='categoryImage' id='categoryImage' required></p>
          <input type="text" name="updatedBy" id="updatedBy" value="<?=$_SESSION['userId']?>" style="display:none" required/>
@@ -231,9 +237,9 @@ if($_POST && isset($_POST['delete'])){
      <?php if($action == "update"): ?>
        <?php while($row = $stmt->fetch()): ?>
          <h1>update</h1>
-         <form method="POST" enctype="multipart/form-data">
+         <form method="POST" enctype="multipart/form-data" id="createFrm">
            <p>Category Title: <input type="text" name="categoryTitle" id="categoryTitle" value= '<?= $row['categoryTitle']?>'/></p>
-           <p>Category Description: <input type="text" name="categoryDescription" id="categoryDescription" value= '<?= $row['categoryDescription']?>'/></p>
+           <p>Category Description:  <textarea rows="4" cols="50" value="" name="categoryDescription" id="categoryDescription" form="createFrm"><?= html_entity_decode($row['categoryDescription'])?></textarea></p>
            <p><label for='image'>Image Filename:</label></p>
            <p><input type='file' name='categoryImage1' id='categoryImage1'></p>
            <p><input type='text' name='categoryImagePrev' id='categoryImagePrev' value="<?=$row['categoryImage']?>"></p>

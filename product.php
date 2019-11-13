@@ -6,7 +6,7 @@ $titlePage = "Products";
 $accountType = "";
 $userId = "";
 if(!isset($_GET['sortBy'])){
-  $query = "SELECT * FROM categories";
+  $query = "SELECT * FROM categories ORDER BY categoryID DESC";
   $statement = $db->prepare($query);
   $statement->execute();
 }
@@ -100,76 +100,21 @@ if(isset($_SESSION['userId'])){
                     <img class="img-responsive img-hover img-thumbnail img-smaller" src="<?=substr($row['categoryImage'],0, -4) . "_medium" . substr($row['categoryImage'], -4)?>" data-lightbox="product-1" >
                 </a>
                 <h3>
-                    <a href=""><?=$row['categoryTitle'] ?></a>
+                    <a href="items.php?id=<?=$row['categoryId']?>"><?=$row['categoryTitle'] ?></a>
                   <?php if($accountType == 'Admin' OR $userId == $row['updatedBy']): ?>
                     <a href="categories.php?action=update&id=<?=$row['categoryId']?>" class="btn btn-primary" id="">Update</a>
                   <?php endif ?>
                 </h3>
-                <p class="auto-style7"><?=$row['categoryDescription']?></p>
+                <p class="auto-style7">
+                  <?=substr(strip_tags(html_entity_decode($row['categoryDescription'])),0,40)?>
+                  <?php if(strlen(html_entity_decode($row['categoryDescription'])) > 40 ): ?>
+                    <a href="items.php?id=<?=$row['categoryId']?>"> See more </a>
+                  <?php endif ?>
+                </p>
             </div>
             <?php endwhile ?>
           <?php endif ?>
-
-            <!--
-            <div class="col-md-4 img-portfolio">
-                <a href="img/Category/deck.jpg" data-lightbox="product-1">
-                    <img class="img-responsive img-hover" src="Assets/img/Category/deck.jpg" >
-                </a>
-                <h3>
-                    <a href="productDecking.html">Decking</a>
-                </h3>
-                <p class="auto-style7">Durable, sleek, easy to install, and low maintenance. BioWood Decking is the ideal product for indoor and outdoor use, as it is made to withstand the elements of nature.</p>
-            </div>
-
-            <div class="col-md-4 img-portfolio">
-                <a href="img/Category/door.jpg" data-lightbox="product-1">
-                    <img class="img-responsive img-hover" src="Assets/img/Category/door.jpg" >
-                </a>
-                <h3>
-                    <a href="productDoorProfile.html">Door Profile</a>
-                </h3>
-                <p class="auto-style7">Smooth, aesthetically pleasing design and finish. BioWood door profiles and frames have an integrated architrave with fine curved edges and a finish that enhances their overall appeal.</p>
-            </div>-->
-
         </div>
-        <!-- /.row -->
-
-        <!-- Projects Row -->
-        <!--<div class="row">
-
-                   <div class="col-md-4 img-portfolio">
-                <a href="img/Category/facade.jpg" data-lightbox="product-1">
-                    <img class="img-responsive img-hover" src="Assets/img/Category/facade.jpg" >
-                </a>
-                <h3>
-                    <a href="productFaçadeScreen.html">Façade Screen</a>
-                </h3>
-                <p class="auto-style7">Low maintenance, sleek appearance, easy installation. BioWood façade screens are intelligent additions to any building for style and protection.</p>
-            </div>
-
-            <div class="col-md-4 img-portfolio">
-                <a href="img/Category/finishacc.jpg" data-lightbox="product-1">
-                    <img class="img-responsive img-hover" src="Assets/img/Category/finishacc.jpg" >
-                </a>
-                <h3>
-                    <a href="productFinishingAcc.html">Finishing Accessories</a>
-                </h3>
-                <p class="auto-style7">BioWood decorative Finishing Accessories may be used for decking, flooring, cladding, or ceiling applications.</p>
-            </div>
-
-            <div class="col-md-4 img-portfolio">
-                <a href="img/Category/halflogs.jpg" data-lightbox="product-1">
-                    <img class="img-responsive img-hover" src="Assets/img/Category/halflogs.jpg" >
-                </a>
-                <h3>
-                    <a href="productHalfLogs.html">Half Logs</a>
-                </h3>
-                <p class="auto-style7">Simply rugged, lightweight, and durable. BioWood Half Log profiles provide a tasteful country facade look.</p>
-            </div>
-        </div>-->
-
-        <!-- Projects Row -->
-
         <!-- Pagination -->
         <div class="row text-center">
             <div class="col-lg-12" style="left: 0px; top: 0px">
@@ -202,8 +147,9 @@ if(isset($_SESSION['userId'])){
     </div>
   </div>
 </form>
-<?php include('footer.php') ?>
 
 </div>
+<?php include('footer.php') ?>
+
 </body>
 </html>
