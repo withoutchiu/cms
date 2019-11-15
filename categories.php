@@ -223,6 +223,11 @@ if($_POST && isset($_POST['delete'])){
   unlink($_POST['categoryImagePrev']);
 
 
+  unlink(substr($_POST['categoryImagePrev'], 0, strlen($_POST['title'])) . $_GET['id'] . substr($_POST['categoryImagePrev'],0 , -4) . "_medium" . substr($_POST['categoryImagePrev'], -4));
+  unlink(substr($_POST['categoryImagePrev'], 0, strlen($_POST['title'])) . $_GET['id'] . substr($_POST['categoryImagePrev'],0 , -4) . "_thumbnail" . substr($_POST['categoryImagePrev'], -4));
+  unlink(substr($_POST['categoryImagePrev'], 0, strlen($_POST['title'])) . $_GET['id']);
+
+
   header("Location:product.php");
 
 }
@@ -255,16 +260,20 @@ if($_POST && isset($_POST['delete'])){
 
      <?php if($action == "update"): ?>
        <?php while($row = $stmt->fetch()): ?>
-         <h1>update</h1>
+         <hr/>
+         <h1 class="text-left">Update</h1>
          <form method="POST" enctype="multipart/form-data" id="createFrm">
-           <p>Category Title: <input type="text" name="categoryTitle" id="categoryTitle" value= '<?= $row['categoryTitle']?>'/></p>
-           <p>Category Description:  <textarea rows="4" cols="50" value="" name="categoryDescription" id="categoryDescription" form="createFrm"><?= html_entity_decode($row['categoryDescription'])?></textarea></p>
-           <p><label for='image'>Image Filename:</label></p>
-           <p><input type='file' name='categoryImage1' id='categoryImage1'></p>
-           <p><input type='text' name='categoryImagePrev' id='categoryImagePrev' value="<?=$row['categoryImage']?>"></p>
+           <p class="text-left">Category Title: <input type="text" name="categoryTitle" id="categoryTitle" value= '<?= $row['categoryTitle']?>'/></p>
+           <p class="text-left">Category Description:  <textarea rows="4" cols="50" value="" name="categoryDescription" id="categoryDescription" form="createFrm"><?= html_entity_decode($row['categoryDescription'])?></textarea></p>
+           <p class="text-left">Current Image:</p>
+           <img src="<?=$row['categoryImage']?>" height="25%" width="25%">
+           <p class="text-left"><label for='image'>Image Filename:</label></p>
+           <p class="text-left"><input type='file' name='categoryImage1' id='categoryImage1'></p>
+           <p class="text-left"><input type='hidden' name='categoryImagePrev' id='categoryImagePrev' value="<?=$row['categoryImage']?>"></p>
+
            <input type="text" name="categoryId" id="categoryId" value= '<?= $row['categoryId']?>' style="display:none"/>
            <p><input type="submit"  name='update' type='update' value="Update this Category" class="btn btn-primary"></p>
-           <p><input type="submit"  name='delete' type='delete' value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"></p>
+           <p><input type="submit"  name='delete' type='delete' value="Delete" class="btn btn-danger" onclick="return confirm('Deleting this category deletes the image and the items associated. Are you sure you want to delete this item?');"></p>
          </form>
        <?php endwhile ?>
      <?php endif ?>

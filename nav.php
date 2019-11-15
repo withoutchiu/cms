@@ -62,7 +62,7 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
               <a href="product.php">Products</a>
           </li>
           <li>
-              <a href="">About</a>
+              <a href="">Search</a>
           </li>
           <li>
               <a href="">Contact Us</a>
