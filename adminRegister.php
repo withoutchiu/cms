@@ -1,6 +1,10 @@
 <?php
 require('connect.php');
 
+function validate_email(){
+  return filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+}
+
 $errorMessage = "";
 if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_POST['emailAddress'])){
   $firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRING);

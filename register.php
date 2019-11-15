@@ -1,6 +1,6 @@
 <?php
 require('connect.php');
-$errorMessage = "1";
+$errorMessage = "";
 if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_POST['emailAddress'])){
   $firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRING);
 	$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING);
@@ -142,7 +142,9 @@ if($_POST && isset($_POST['lastName']) && isset($_POST['firstName']) && isset($_
 			    			</div>
                 <div class='p-3 mb-2 bg-danger text-white' id='confirmError'>Password does not match. Please try Again.</div>
                 <div class='p-3 mb-2 bg-success text-white' id='confirmSuccess'>Password Match!</div>
+                <?php if(strlen($errorMessage) > 0): ?>
                 <div class='p-3 mb-2 bg-danger text-white' id='confirmSuccess'><?= $errorMessage ?></div>
+                <?php endif ?>
                 <br/>
 						<div class='col-lg-offset-5'>
 			    			<input type='submit' name='register' id='register' value='Register' class='btn btn-info btn-block input-lg' style='width:100px; font-size: large;'>

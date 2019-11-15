@@ -56,18 +56,21 @@ if($_POST && isset($_POST['insert']) && isset($_POST['categoryTitle']) && isset(
   $imagePathToDb = "";
 
   $categoryTitle = filter_input(INPUT_POST, 'categoryTitle', FILTER_SANITIZE_STRING);
+  $categoryPlainDescription = str_replace('$nbsp;', '', filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_STRING));
 	$categoryDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$updatedBy = filter_input(INPUT_POST, 'updatedBy', FILTER_SANITIZE_STRING);
 
-  $query = "INSERT INTO categories(categoryTitle,categoryDescription,categoryImage,updatedBy)
-                          VALUES (:categoryTitle,:categoryDescription,:categoryImage,:updatedBy)";
+  $query = "INSERT INTO categories(categoryTitle,categoryDescription,categoryPlainDescription,categoryImage,updatedBy)
+                          VALUES (:categoryTitle,:categoryDescription,:categoryPlainDescription,:categoryImage,:updatedBy)";
 
   $statement = $db->prepare($query);
   $statement->bindValue(':categoryTitle', $categoryTitle);
   $statement->bindValue(':categoryDescription', $categoryDescription);
+  $statement->bindValue(':categoryPlainDescription', $categoryPlainDescription);
   $statement->bindValue(':updatedBy', $updatedBy);
 
   echo "<h1>test</h1>";
+
 
   if ($image_upload_detected) {
       $image_filename        = $categoryTitle . '_' . $_FILES['categoryImage']['name'];
@@ -91,7 +94,7 @@ if($_POST && isset($_POST['insert']) && isset($_POST['categoryTitle']) && isset(
                 $image->resizeToWidth($imagelist['size']);
                 $image->save($replacedName . $actual_file_extension);
 
-                $imagePathToDb = "uploads" . DIRECTORY_SEPARATOR . $image_filename;
+                $imagePathToDb = "uploads/" . $image_filename;
 
                 echo $imagePathToDb;
                 }
@@ -115,6 +118,7 @@ if($_POST && isset($_POST['update']) && isset($_POST['categoryTitle']) && isset(
   echo "<h1> Test2--- " . $_POST['categoryDescription'] . "</h1>";
 
   $categoryTitle = filter_input(INPUT_POST, 'categoryTitle', FILTER_SANITIZE_STRING);
+  $categoryPlainDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_STRING);
   $categoryDescription = filter_input(INPUT_POST, 'categoryDescription', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
 
@@ -131,12 +135,13 @@ if($_POST && isset($_POST['update']) && isset($_POST['categoryTitle']) && isset(
 
 
   if($image_upload_detected != 1){
-  $query = "UPDATE categories SET categoryTitle ='$_POST[categoryTitle]', categoryDescription = '$_POST[categoryDescription]'
+  $query = "UPDATE categories SET categoryTitle ='$_POST[categoryTitle]', categoryDescription = '$categoryDescription', categoryPlainDescription = '$categoryPlainDescription'
   WHERE categoryId = '$_GET[id]' ";
 
   $statement = $db->prepare($query);
   $statement->bindValue(':categoryTitle', $categoryTitle);
   $statement->bindValue(':categoryDescription', $categoryDescription);
+  $statement->bindValue(':categoryPlainDescription', $categoryPlainDescription);
   $statement->bindValue(':categoryId', $categoryId , PDO::PARAM_INT);
   $statement->execute();
   header("Location:product.php");
@@ -186,12 +191,13 @@ if($_POST && isset($_POST['update']) && isset($_POST['categoryTitle']) && isset(
       }else{
         header("Location:product.php");
       }
-      $query = "UPDATE categories SET categoryTitle ='$_POST[categoryTitle]', categoryDescription = '$_POST[categoryDescription]', categoryImage = '$imagePathToDb'
+      $query = "UPDATE categories SET categoryTitle ='$_POST[categoryTitle]', categoryDescription = '$categoryDescription', categoryPlainDescription = '$categoryPlainDescription', categoryImage = '$imagePathToDb'
       WHERE categoryId = '$_GET[id]' ";
 
       $statement = $db->prepare($query);
       $statement->bindValue(':categoryTitle', $categoryTitle);
       $statement->bindValue(':categoryDescription', $categoryDescription);
+      $statement->bindValue(':categoryPlainDescription', $categoryPlainDescription);
       $statement->bindValue(':categoryImage', $imagePathToDb);
       $statement->bindValue(':categoryId', $categoryId , PDO::PARAM_INT);
 
@@ -206,6 +212,17 @@ if($_POST && isset($_POST['delete'])){
   $query = "DELETE FROM categories WHERE categoryId = '$_GET[id]'";
   $statement = $db->prepare($query);
   $statement->execute();
+
+  $query = "DELETE FROM items WHERE categoryId = '$_GET[id]'";
+  $statement = $db->prepare($query);
+  $statement->execute();
+
+
+  unlink(substr($_POST['categoryImagePrev'],0 , -4) . "_medium" . substr($_POST['categoryImagePrev'], -4));
+  unlink(substr($_POST['categoryImagePrev'],0 , -4) . "_thumbnail" . substr($_POST['categoryImagePrev'], -4));
+  unlink($_POST['categoryImagePrev']);
+
+
   header("Location:product.php");
 
 }
@@ -218,6 +235,7 @@ if($_POST && isset($_POST['delete'])){
      <title>Product Categories</title>
      <script src="https://cdn.tiny.cloud/1/1btjkrz09mo7dj8wr7gi062if5ego7bhp8vgu2mohwlhy5vp/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
      <script>tinymce.init({selector:'#categoryDescription'});</script>
+     <script src='indexcss/js/categories.js'></script>
    </head>
    <body>
      <?php include('nav.php') ?>
@@ -229,6 +247,7 @@ if($_POST && isset($_POST['delete'])){
          <!-- <p>Category Description: <input type="text" name="categoryDescription" id="categoryDescription" required/></p> -->
          <p><label for='image'>Image Filename:</label></p>
          <p><input type='file' name='categoryImage' id='categoryImage' required></p>
+         <img src="" width="200" style="display:none;" />
          <input type="text" name="updatedBy" id="updatedBy" value="<?=$_SESSION['userId']?>" style="display:none" required/>
          <p><input type="submit" name='insert' type='insert' value="Insert Category"></p>
       </form>

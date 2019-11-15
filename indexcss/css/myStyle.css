@@ -5,3 +5,16 @@
 .img-smaller{
   height: 250px !important;
 }
+
+#categoryDescriptionDisplay p{
+  font-weight: unset !important;
+  text-align: unset !important;
+  font-family: unset !important;
+  color: unset !important;
+  text-decoration: unset !important;
+  font-size: unset !important;
+}
+
+div.itemDisplay {
+  text-align: unset !important;
+}

@@ -82,7 +82,7 @@ if(isset($_GET['id']) AND $_GET['id'] >= 1 AND is_numeric($_GET['id']) AND isset
                   $image->resizeToWidth($imagelist['size']);
                   $image->save($replacedName . $actual_file_extension);
 
-                  $imagePathToDb = "uploads" . DIRECTORY_SEPARATOR . "items" . DIRECTORY_SEPARATOR .$image_filename;
+                  $imagePathToDb = "uploads/"  . "items/" .$image_filename;
 
                   echo $imagePathToDb;
                   }

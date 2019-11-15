@@ -35,7 +35,7 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
 <link href="Assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <link href='indexcss/css/bgndGallery.css' rel='stylesheet' type='text/css'>
-
+<link href='indexcss/css/myStyle.css' rel='stylesheet' type='text/css'>
 <script src="Assets/js/jquery-1.11.0.min.js"></script>
 <script src="Assets/js/lightbox.min.js"></script>
 

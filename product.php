@@ -6,7 +6,7 @@ $titlePage = "Products";
 $accountType = "";
 $userId = "";
 if(!isset($_GET['sortBy'])){
-  $query = "SELECT * FROM categories ORDER BY categoryID DESC";
+  $query = "SELECT * FROM categories ORDER BY categoryID ASC";
   $statement = $db->prepare($query);
   $statement->execute();
 }
@@ -77,14 +77,14 @@ if(isset($_SESSION['userId'])){
             <h2>No categories yet.</h2>
           <?php  else: ?>
             <?php if(isset($_SESSION['userId'])): ?>
+                <?php if(isset($_SESSION['accountType']) AND $_SESSION['accountType'] == "Admin"): ?>
                 <div class="col-md-offset-4 col-md-4 img-portfolio">
                   <form method="GET">
                       <div class="col-md-8">
                         <select class="form-control" id="sortBy" name="sortBy">
-                          <option>Sort By...</option>
                           <option value="Title">Sort by Title</option>
                           <option value="Update">Sort by latest Update</option>
-                          <option value="Create">Sort by Created Update</option>
+                          <option value="Create">Sort by Created Date</option>
                         </select>
                       </div>
                       <div class="col-md-4">
@@ -92,7 +92,17 @@ if(isset($_SESSION['userId'])){
                       </div>
                   </form>
                 </div>
+                <?php endif ?>
               </div>
+            <?php endif ?>
+            <?php if(isset($_GET['sortBy'])): ?>
+              <?php if($_GET['sortBy'] == "Title"):?>
+                <h1>Category by Title</h1>
+              <?php elseif($_GET['sortBy'] == "Update"): ?>
+                <h1>Category by Update Date</h1>
+              <?php else: ?>
+                <h1>Category by Created Date</h1>
+              <?php endif ?>
             <?php endif ?>
             <?php while($row = $statement->fetch()): ?>
             <div class="col-md-4 img-portfolio">
@@ -106,8 +116,8 @@ if(isset($_SESSION['userId'])){
                   <?php endif ?>
                 </h3>
                 <p class="auto-style7">
-                  <?=substr(strip_tags(html_entity_decode($row['categoryDescription'])),0,40)?>
-                  <?php if(strlen(html_entity_decode($row['categoryDescription'])) > 40 ): ?>
+                  <?=substr(strip_tags(html_entity_decode($row['categoryPlainDescription'])),0,100)?>
+                  <?php if(strlen(html_entity_decode($row['categoryPlainDescription'])) > 100 ): ?>
                     <a href="items.php?id=<?=$row['categoryId']?>"> See more </a>
                   <?php endif ?>
                 </p>
