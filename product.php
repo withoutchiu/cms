@@ -5,8 +5,21 @@ session_Start();
 $titlePage = "Products";
 $accountType = "";
 $userId = "";
+$pageNo = 1;
+if(isset($_GET['pageNo'])){
+  $pageNo = $_GET['pageNo'];
+}
+$no_of_records_per_page = 6;
+$offset = ($pageNo-1) * $no_of_records_per_page;
+$total_pages_sql = "SELECT COUNT(*) FROM categories";
+$st = $db->prepare($total_pages_sql);
+$st->execute();
+$row = $st->fetch();
+$total_rows = $row[0];
+$total_pages = ceil($total_rows / $no_of_records_per_page);
+
 if(!isset($_GET['sortBy'])){
-  $query = "SELECT * FROM categories ORDER BY categoryID ASC";
+  $query = "SELECT * FROM categories ORDER BY createdDate ASC LIMIT $offset, $no_of_records_per_page ";
   $statement = $db->prepare($query);
   $statement->execute();
 }
@@ -17,13 +30,13 @@ if(isset($_GET['sortBy']) AND $_GET['sortBy'] == "Title"){
   $titlePage = "Products by Title";
 }
 if(isset($_GET['sortBy']) AND $_GET['sortBy'] == "Update"){
-  $query = "SELECT * FROM categories ORDER BY updatedDate DESC";
+  $query = "SELECT * FROM categories ORDER BY updatedDate DESC LIMIT $offset, $no_of_records_per_page";
   $statement = $db->prepare($query);
   $statement->execute();
   $titlePage = "Products by Latest Update";
 }
 if(isset($_GET['sortBy']) AND $_GET['sortBy'] == "Create"){
-  $query = "SELECT * FROM categories ORDER BY createdDate";
+  $query = "SELECT * FROM categories ORDER BY createdDate LIMIT $offset, $no_of_records_per_page";
   $statement = $db->prepare($query);
   $statement->execute();
   $titlePage = "Products by Created Date";
@@ -39,7 +52,8 @@ if(isset($_SESSION['userId'])){
 //   $statement->execute();
 // }
 ?>
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
+
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,8 +75,11 @@ if(isset($_SESSION['userId'])){
         <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
+              <?=$offset ?>
+              <?=$no_of_records_per_page ?>
                   <?php if($_GET) ?>
-                  <h1 class="page-header"><?=$titlePage ?></h1>
+                  <h1 class="page-header"><?=$titlePage?></h1>
+                   <input type="text" name="qryString" id="qryString" onblur="onBlur(this)">
                   <?php if(isset($_SESSION['userId'])): ?>
                     <h4><a href="categories.php?action=insert">Click here to add product</a></h4>
                   <?php endif ?>
@@ -104,6 +121,19 @@ if(isset($_SESSION['userId'])){
                 <h1>Category by Created Date</h1>
               <?php endif ?>
             <?php endif ?>
+            <table class="table is-fullwidth is-hoverable" id="myTable">
+                <thead>
+                    <tr>
+                      <th>Primary Street</th>
+                      <th>Cross Street</th>
+                      <th>Boundaries</th>
+                      <th>Direction</th>
+                      <th>Traffic Effect</th>
+                    </tr>
+                </thead>
+                <tbody id="myTableTbody">
+            </tbody>
+          </table>
             <?php while($row = $statement->fetch()): ?>
             <div class="col-md-4 img-portfolio">
                 <a href="<?=$row['categoryImage']?>" data-lightbox="product-1">
@@ -130,19 +160,16 @@ if(isset($_SESSION['userId'])){
             <div class="col-lg-12" style="left: 0px; top: 0px">
                 <ul class="pagination">
                     <li>
-                        <a href="product1.html">&laquo;</a>
+                        <a href="product.php">&laquo;</a>
                     </li>
-                    <li class="active">
-                       <a href="product1.html">1</a>
+                    <li class="<?php if($pageNo <= 1){ echo 'disabled'; } ?>">
+                       <a href="<?php if($pageNo <= 1){ echo '#'; } else { echo "?pageNo=".($pageNo - 1); } ?>">Previous</a>
                     </li>
-                    <li>
-                        <a href="product2.html">2</a>
-                    </li>
-                    <li>
-                        <a href="product3.html">3</a>
+                    <li class="<?php if($pageNo >= $total_pages){ echo 'disabled'; } ?>">
+                        <a href="<?php if($pageNo >= $total_pages){ echo '#'; } else { echo "?pageNo=".($pageNo + 1); } ?>">Next</a>
                     </li>
                     <li>
-                        <a href="product3.html">&raquo;</a>
+                        <a href="?pageNo=<?php echo $total_pages; ?>">&raquo;</a>
                     </li>
                 </ul>
             </div>
@@ -159,7 +186,7 @@ if(isset($_SESSION['userId'])){
 </form>
 
 </div>
+<script src="indexcss/js/product.js"></script>
 <?php include('footer.php') ?>
-
 </body>
 </html>

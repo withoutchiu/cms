@@ -84,7 +84,7 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
        </li> -->
        <?php if(isset($_SESSION['accountType']) AND $_SESSION['accountType'] == 'Admin'): ?>
          <li>
-           <a href="">Manage Users Account</a>
+           <a href="accounts.php">Manage Users Account</a>
          </li>
        <?php endif ?>
        <li>
