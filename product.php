@@ -124,11 +124,11 @@ if(isset($_SESSION['userId'])){
             <table class="table is-fullwidth is-hoverable" id="myTable">
                 <thead>
                     <tr>
-                      <th>Primary Street</th>
-                      <th>Cross Street</th>
-                      <th>Boundaries</th>
-                      <th>Direction</th>
-                      <th>Traffic Effect</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Image</th>
+                      <th>Date</th>
+                      <th>Link</th>
                     </tr>
                 </thead>
                 <tbody id="myTableTbody">

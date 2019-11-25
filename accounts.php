@@ -40,7 +40,7 @@ $statement->execute();
            <td><?= $row['username'] ?></td>
            <td><?= $row['accountType'] ?></td>
            <td><?= $row['dateCreated'] ?></td>
-           <td> <a href="editAccount.php?id=<?= $row['userId']?>"> Edit </a> | Delete</td>
+           <td> <a href="editAccount.php?id=<?= $row['userId']?>"> Edit </a></td>
          </tr>
         <?php endwhile ?>
        </tbody>

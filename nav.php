@@ -79,9 +79,6 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
           <?php endif ?>
           </ul>
        <ul class="nav navbar-nav navbar-right">
-       <!-- <li>
-           <a href= register.php>Add Page</a>
-       </li> -->
        <?php if(isset($_SESSION['accountType']) AND $_SESSION['accountType'] == 'Admin'): ?>
          <li>
            <a href="accounts.php">Manage Users Account</a>
@@ -96,6 +93,17 @@ if(isset($_SESSION['firstName']) && !empty($_SESSION['firstName'])) {
        </li>
        </ul>
   </div>
+  <div class="col-md-4">
+    <p> Search throughout the page:
+  </div>
+  <form action="searchAll.php" method="post">
+  <div class="col-md-4">
+  <input type="text" class="form-control" id="query" name="query" placeholder="Enter text...">
+  </div>
+  <div class="col-md-4">
+  <input type="submit" name="search" class="btn btn-primary" value="Search">
+  </div>
+  </form>
   <!-- /.navbar-collapse -->
 </div>
 <!-- /.container -->

@@ -12,7 +12,7 @@ $ajax_data = [
 
 if(filter_input(INPUT_GET,'query', FILTER_SANITIZE_STRING)){
   $queryString = $_GET['query'];
-  $query = "SELECT * FROM categories WHERE categoryTitle LIKE '%$queryString'";
+  $query = "SELECT * FROM categories WHERE categoryTitle LIKE '%$queryString%'";
   $statement = $db->prepare($query);
   $statement->execute();
 
